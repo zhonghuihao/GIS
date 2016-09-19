@@ -1,19 +1,16 @@
-from pandas_datareader import data
-from yahoo_finance import Share
-from datetime import datetime
+import pandas_datareader.data as web
+import datetime
+import matplotlib.pyplot as plt
 
 
-swtx = Share('002405.sz')
-dictK = swtx.get_historical('2016-08-06', '2016-09-06')
-# print(swtx.get_trade_datetime(), swtx.get_open(),
-#       swtx.get_days_high(), swtx.get_days_low(), swtx.get_price(),
-#       swtx.get_short_ratio())
-f = open('file/STK.txt', 'w')
-
-for ln in dictK:
-    f.write(str(ln) + '\n')
-
-
-
-
+start = datetime.datetime.strptime('1/1/2015', '%m/%d/%Y')
+end = datetime.datetime.strptime('2/20/2016', '%m/%d/%Y')
+f = web.DataReader(['002405.sz', '600589.ss'], 'yahoo', start, end)
+print('Adjusted Closing Prices')
+print(f['Adj Close'].describe())
+ax = f['Adj Close'].plot(grid=True, fontsize=10, rot=45.)
+ax.set_ylabel('Adjusted Closing Price ($)')
+plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.1),
+           shadow=True, fancybox=True, prop={'size': 10})
+plt.show()
 
